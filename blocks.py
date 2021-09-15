@@ -1,5 +1,6 @@
 
 from PIL import Image, ImageFont, ImageDraw, ImageEnhance
+from numpy import source
 
 
 class MundoBloques:
@@ -101,21 +102,41 @@ class MundoBloques:
             color = MundoBloques.Colors[i]
             label = MundoBloques.Labels[i]
             drawBlock(x, y, label, color)
-        # source_img.save("outfile.png", "PNG")
+
         if filename is not None:
             source_img.save(filename, "png")
+        return source_img
+
+    def PintarTransiciones(self, estadolist, filename=None):
+        # Pinta todas los movimientos en una sola imagen, añadiendo el estado inicial
+        canva = Image.new("RGBA", ((len(estadolist)+1)*MundoBloques.tableroHeight *
+                                   100 + (len(estadolist))*20, MundoBloques.tableroHeight*100))
+        print(((len(estadolist)+1)*MundoBloques.tableroHeight *
+               100 + (len(estadolist)+1)*20, MundoBloques.tableroHeight*100))
+        canva.paste(self.PintarEstado(self.estado_inicial), (0, 0))
+        draw = ImageDraw.Draw(canva)
+
+        for i in range(1, len(estadolist)+1):
+            estado = estadolist[i-1]
+            canva.paste(self.PintarEstado(estado),
+                        (i*MundoBloques.tableroHeight*100 + 20*i, 0))
+            draw.rectangle(
+                ((100*i*MundoBloques.tableroLength+(20*(i-1)), 0), (100*i*MundoBloques.tableroLength+20+(20*(i-1)), 100*MundoBloques.tableroHeight)), fill="black")
+        canva.save(filename, "png")
+        return canva
 
 
 if __name__ == "__main__":
     from busqueda import *
     prob = MundoBloques([(2, 1), (2, 0), (1, 1)], [(0, 2), (1, 2), (2, 2)])
     x = iterative_deepening_search(prob, l_max=5)
-    moves = find_path(x)
-    print(moves)
+    nodos = find_path(x)
+    estadolist = [nod.estado for nod in nodos]
+    prob.PintarTransiciones(estadolist, "transiciones.png")
 
-    prob.PintarEstado(prob.estado_inicial, "mov0.png")
-    for i in range(len(moves)):
-        prob.PintarEstado(moves[i].estado, "mov" + str(i+1) + ".png")
+    # prob.PintarEstado(prob.estado_inicial, "mov0.png")
+    # for i in range(len(moves)):
+    #     prob.PintarEstado(moves[i].estado, "mov" + str(i+1) + ".png")
 
     # s1 = prob.estado_inicial
     # acciones = prob.acciones_aplicables(s1)
