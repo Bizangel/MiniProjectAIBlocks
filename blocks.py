@@ -125,6 +125,12 @@ class MundoBloques:
         canva.save(filename, "png")
         return canva
 
+    def PintarTransicionesGif(self, estadolist, filename, frameSeconds=1):
+        images = [self.PintarEstado(estado) for estado in estadolist]
+        start = (self.PintarEstado(self.estado_inicial))
+        start.save(filename, save_all=True, append_images=images,
+                   optimize=False, duration=frameSeconds*1000, loop=0)
+
 
 if __name__ == "__main__":
     from busqueda import *
@@ -132,7 +138,8 @@ if __name__ == "__main__":
     x = iterative_deepening_search(prob, l_max=5)
     nodos = find_path(x)
     estadolist = [nod.estado for nod in nodos]
-    prob.PintarTransiciones(estadolist, "transiciones.png")
+    # prob.PintarTransiciones(estadolist, "transiciones.png")
+    prob.PintarTransicionesGif(estadolist, "out.gif")
 
     # prob.PintarEstado(prob.estado_inicial, "mov0.png")
     # for i in range(len(moves)):
