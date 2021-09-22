@@ -15,4 +15,4 @@ A sample solution of the given previous sample problem can be seen below:
 
 ![Solution](transiciones.png)
 
-This project solves that by implementing an interface of possible actions, and transitions via every possible actions, performing a <a href="https://en.wikipedia.org/wiki/State_space_search">State Space Search</a>, thus using various algorithms to solve the problem.
+This project solves this problem, by implementing an interface of possible actions, and transitions from state to state. Effectively performing a <a href="https://en.wikipedia.org/wiki/State_space_search">State Space Search</a>, thus using various algorithms to solve the problem.
